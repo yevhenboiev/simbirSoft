@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class JsoupParser {
 
-    private static Logger logger = LogManager.getLogger(JsoupParser.class);
+    private static Logger logger = LogManager.getLogger(JsoupParser.class.getName());
     private String url;
 
     public JsoupParser(String url) {
@@ -23,6 +23,9 @@ public class JsoupParser {
             return webSite.text();
         } catch (IOException e) {
             logger.info("Not found url {}", url);
+            throw new NotFoundUrl(url);
+        } catch (RuntimeException e) {
+            logger.info("Incorrect url {}", url);
             throw new NotFoundUrl(url);
         }
     }
