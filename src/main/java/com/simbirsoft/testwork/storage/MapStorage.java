@@ -21,7 +21,7 @@ public class MapStorage implements Storage {
     saveInDataBase(storage, url);
   }
 
-  public Map<String, Integer> getAllWordsAndCount() {
+  public Map<String, Integer> getStorage() {
     return storage;
   }
 

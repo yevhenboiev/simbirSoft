@@ -7,7 +7,7 @@ public interface Storage {
 
     void save(List<String> listWords, String url);
 
-    Map<String, Integer> getAllWordsAndCount();
+    Map<String, Integer> getStorage();
 
     void printAllWords();
 
