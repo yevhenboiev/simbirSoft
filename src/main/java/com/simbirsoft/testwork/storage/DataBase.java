@@ -15,13 +15,14 @@ public class DataBase {
 
     private final SqlHelper sqlHelper;
     private static Logger logger = LogManager.getLogger(DataBase.class.getName());
-    private static String url;
+    private String url;
 
     public DataBase(String dbUrl, String dbUser, String dbPassword) {
         sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
     }
 
     public void createTable(String url) {
+        this.url = url;
         sqlHelper.execute("CREATE TABLE IF NOT EXISTS \"" + url + "\"\n" +
                 "(\n" +
                 "    id SERIAL,\n" +
@@ -32,6 +33,7 @@ public class DataBase {
     }
 
     public void doSave(Map<String, Integer> storage, String url) {
+        sqlHelper.execute("DELETE FROM \"" + url + "\"");
         for (Map.Entry<String, Integer> item : storage.entrySet()) {
             sqlHelper.execute("INSERT INTO \"" + url + "\" (word, count) VALUES (?, ?)", ps -> {
                 ps.setString(1, item.getKey());
