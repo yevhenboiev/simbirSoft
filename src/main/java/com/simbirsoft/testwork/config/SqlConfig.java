@@ -14,7 +14,7 @@ public class SqlConfig {
     private static Properties properties = new Properties();
     private static final Logger logger = LogManager.getLogger(SqlConfig.class.getName());
 
-    private static String getProperties(String name) {
+    public static String getProperties(String name) {
         if (properties.isEmpty()) {
             try (InputStream is =SqlConfig.class.getClassLoader().getResourceAsStream("sql.properties")){
                 properties.load(is);

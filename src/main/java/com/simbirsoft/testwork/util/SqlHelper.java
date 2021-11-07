@@ -12,6 +12,10 @@ public class SqlHelper {
         this.connectionFactory = connectionFactory;
     }
 
+    public void execute(String sql) {
+        execute(sql, PreparedStatement::execute);
+    }
+
     public <T> T execute(String sql, SqlExecutor<T> sqlExecutor) {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
