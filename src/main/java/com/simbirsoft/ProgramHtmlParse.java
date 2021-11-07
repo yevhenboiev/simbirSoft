@@ -1,3 +1,5 @@
+package com.simbirsoft;
+
 import com.simbirsoft.testwork.model.Program;
 
 public class ProgramHtmlParse {
