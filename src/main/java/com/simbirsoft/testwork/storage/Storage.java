@@ -12,4 +12,6 @@ public interface Storage {
     void printAllWords();
 
     int size();
+
+    void clear();
 }

@@ -13,11 +13,11 @@ public class ExceptionConvert {
     public static StorageException convert(SQLException e) {
         logger.info(e.getSQLState());
         if (e.getSQLState().equals("23505")) {
-            return new StorageException("Exist DataBase", null);
-        } else if(e.getSQLState().equals("22023")) {
-            return new StorageException("Not exist DataBase", null);
+            return new StorageException("Exist DataBase");
+        } else if (e.getSQLState().equals("22023")) {
+            return new StorageException("Not exist DataBase");
         }
-        return new StorageException(e.getMessage(), null);
+        return new StorageException(e.getMessage());
     }
 
 }
