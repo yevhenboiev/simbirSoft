@@ -21,6 +21,10 @@ public class MapStorage implements Storage {
     saveInDataBase(storage, url);
   }
 
+  public void clear() {
+    storage.clear();
+  }
+
   public Map<String, Integer> getStorage() {
     return storage;
   }
