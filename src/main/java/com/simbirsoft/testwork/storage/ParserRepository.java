@@ -5,11 +5,11 @@ import com.simbirsoft.testwork.util.SqlHelper;
 import java.sql.DriverManager;
 import java.util.Map;
 
-public class DataBase {
+public class ParserRepository {
 
     private final SqlHelper sqlHelper;
 
-    public DataBase(String dbUrl, String dbUser, String dbPassword) {
+    public ParserRepository(String dbUrl, String dbUser, String dbPassword) {
         sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
     }
 

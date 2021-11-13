@@ -21,7 +21,7 @@ public class SqlHelper {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             return sqlExecutor.execute(ps);
         } catch (SQLException e) {
-            throw ExceptionConvert.convert(e);
+            throw ExceptionConverter.convert(e);
         }
     }
 }

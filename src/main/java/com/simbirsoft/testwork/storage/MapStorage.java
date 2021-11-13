@@ -25,7 +25,7 @@ public class MapStorage implements Storage {
         storage.clear();
     }
 
-    public Map<String, Integer> getStorage() {
+    public Map<String, Integer> getAll() {
         return storage;
     }
 
@@ -40,9 +40,7 @@ public class MapStorage implements Storage {
     }
 
     private void saveInDataBase(Map<String, Integer> storage, String url) {
-        DataBase db = new DataBase(SqlConfig.getProperties(SqlConfig.DB_URL),
-                SqlConfig.getProperties(SqlConfig.DB_USER),
-                SqlConfig.getProperties(SqlConfig.DB_PASSWORD));
+        ParserRepository db = SqlConfig.get().getStorage();
         db.createTable(url);
         db.doSave(storage, url);
     }

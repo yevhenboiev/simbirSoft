@@ -1,6 +1,6 @@
 package com.simbirsoft.testwork.storage;
 
-import com.simbirsoft.testwork.exeption.StorageException;
+import com.simbirsoft.testwork.exception.StorageException;
 import com.simbirsoft.testwork.helper.SplitHelper;
 import com.simbirsoft.testwork.util.JsoupParser;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +41,7 @@ class MapStorageTest {
         storage.clear();
         String words = "Hello, my, hello, friend, qwerty!qwerty";
         storage.save(SplitHelper.splitAndSortText(words), url);
-        assertEquals(expectedMap, storage.getStorage());
+        assertEquals(expectedMap, storage.getAll());
     }
 
     @Test

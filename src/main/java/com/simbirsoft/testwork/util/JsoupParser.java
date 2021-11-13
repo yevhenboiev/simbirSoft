@@ -1,18 +1,17 @@
 package com.simbirsoft.testwork.util;
 
-import com.simbirsoft.testwork.exeption.StorageException;
+import com.simbirsoft.testwork.exception.StorageException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
 public class JsoupParser {
 
-    private static final Logger logger = LogManager.getLogger(JsoupParser.class.getName());
+    private static final Logger LOG = LogManager.getLogger(JsoupParser.class.getName());
     private final String url;
     private final Connection connection;
     private Document webSite;
@@ -22,8 +21,8 @@ public class JsoupParser {
         try {
             connection = Jsoup.connect(url);
         } catch (IllegalArgumentException e) {
-            logger.info("Incorrect url");
-            throw new StorageException("Incorrect url {}");
+            LOG.info("Incorrect url");
+            throw new StorageException("Incorrect url {}", e);
         }
     }
 
@@ -31,25 +30,12 @@ public class JsoupParser {
         try {
             webSite = connection.get();
         } catch (IOException e) {
-            logger.info("Not found text");
-            throw new StorageException("Not found text " + url);
+            LOG.info("Not found text");
+            throw new StorageException("Not found text " + url, e);
         }
     }
 
     public String readText() {
-        return webSite.text();
-    }
-
-    public String readTitle() {
-        return webSite.title();
-    }
-
-    public String readTag(String tag) {
-        Elements elements = webSite.select(tag);
-        return elements.text();
-    }
-
-    public String getUrl() {
-        return url;
+        return webSite.body().text();
     }
 }
