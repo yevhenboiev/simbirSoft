@@ -3,6 +3,7 @@ package com.simbirsoft.testwork.storage;
 import com.simbirsoft.testwork.util.SqlHelper;
 
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.util.Map;
 
 public class ParserRepository {
@@ -13,26 +14,26 @@ public class ParserRepository {
         sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
     }
 
-    public void createTable(String url) {
-        sqlHelper.execute("CREATE TABLE IF NOT EXISTS \"" + url + "\"\n" +
-                "(\n" +
-                "    id SERIAL,\n" +
-                "    word VARCHAR(100),\n" +
-                "    count INTEGER,\n" +
-                "    PRIMARY KEY(id)\n" +
-                ");");
-    }
-
-    public void doSave(Map<String, Integer> storage, String url) {
-        sqlHelper.execute("DELETE FROM \"" + url + "\"");
-        for (Map.Entry<String, Integer> item : storage.entrySet()) {
-            sqlHelper.execute("INSERT INTO \"" + url + "\" (word, count) VALUES (?, ?)", ps -> {
-                ps.setString(1, item.getKey());
-                ps.setInt(2, item.getValue());
-                ps.execute();
-                return null;
-            });
-        }
+    public void save(Map<String, Integer> storage, String url) {
+        sqlHelper.transactionExecute(conn -> {
+            try (PreparedStatement preparedStatement =
+                         conn.prepareStatement("INSERT INTO webSite (url) VALUES (?)")) {
+                preparedStatement.setString(1, url);
+                preparedStatement.execute();
+            }
+            try (PreparedStatement preparedStatement = conn.prepareStatement(
+                    "INSERT INTO wordsCounter (site_url, word, count) VALUES (?, ?, ?)"
+            )) {
+                for (Map.Entry<String, Integer> item : storage.entrySet()) {
+                    preparedStatement.setString(1, url);
+                    preparedStatement.setString(2, item.getKey());
+                    preparedStatement.setInt(3, item.getValue());
+                    preparedStatement.addBatch();
+                }
+                preparedStatement.executeBatch();
+            }
+            return null;
+        });
     }
 
 }

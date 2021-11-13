@@ -1,7 +1,8 @@
 package com.simbirsoft.testwork.util;
 
+import com.simbirsoft.testwork.exception.StorageException;
+
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class SqlHelper {
@@ -12,16 +13,19 @@ public class SqlHelper {
         this.connectionFactory = connectionFactory;
     }
 
-    public void execute(String sql) {
-        execute(sql, PreparedStatement::execute);
-    }
 
-    public <T> T execute(String sql, SqlExecutor<T> sqlExecutor) {
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            return sqlExecutor.execute(ps);
+    public <T> void transactionExecute(SqlExecutor<T> executor) {
+        try (Connection conn = connectionFactory.getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                executor.execute(conn);
+                conn.commit();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw ExceptionConverter.convert(e);
+            }
         } catch (SQLException e) {
-            throw ExceptionConverter.convert(e);
+            throw new StorageException(e.getMessage());
         }
     }
 }

@@ -1,8 +1,9 @@
 package com.simbirsoft.testwork.util;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public interface SqlExecutor<T> {
-    T execute(PreparedStatement ps) throws SQLException;
+    T execute(Connection conn) throws SQLException;
 }

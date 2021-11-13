@@ -40,9 +40,8 @@ public class MapStorage implements Storage {
     }
 
     private void saveInDataBase(Map<String, Integer> storage, String url) {
-        ParserRepository db = SqlConfig.get().getStorage();
-        db.createTable(url);
-        db.doSave(storage, url);
+        ParserRepository parserRepository = SqlConfig.get().getStorage();
+        parserRepository.save(storage, url);
     }
 
 }
